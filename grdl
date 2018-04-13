@@ -1,39 +1,41 @@
 #!/bin/bash
-#script to automatacally build and install apk from github projects, when you are in project directory
+#script to automatically build and install apk from github projects or when you are in project directory
 
+sdk="/home/rud/.Sdk"		# <-- CHANGE THIS. It should be an absolute path to androdi Sdk dir. 
 localf="./local.properties"
 apk="./app/build/outputs/apk/app-debug.apk"
-sdk="/home/rud/.Sdk"		#this should be absolute path name
 
-function build { #this function builds and installs apk
+#this function builds and installs apk
+function build { 
 	if [ ! -e "$apk" ]; then	#if apk exist then directly install it 
 		if [ ! -e "./gradlew" ]; then	#check if inside valid gradle system
-			echo no gradlew script found. not inside gradle system
+			echo "no gradlew script found. not inside gradle system"
 			exit 1
 		fi
 		if [ ! -f "$localf" ]; then 
-			echo 'sdk.dir='$sdk > $localf #for specifying location of sdk
-			cat $localf && echo
+			echo 'sdk.dir='$sdk > $localf 		#for specifying location of sdk
 		fi
 		./gradlew app:assembleDebug			#if apk does not exist build it
 	fi
-	#adb connect 192.168.43.1:555  			#if you use adb wireless connection
-	adb install -r $apk						#installs apk, reinstall if already exist
+	adb connect 192.168.43.1:5555				#if you use adb wireless connection
+	adb install -r $apk					#installs apk, reinstall if already exist
 	#if apk cant be installed because no single adb device found then, connect to single adb and then rerun script
 }
 
+#main script
+
 if [[ -z "$1" ]]; then
 	build			#if no args passed then install the script
-else				#if args is passed 
-	if [[ $1 != http?(s)://github.com/* ]]; then
-		echo "thats not github url"
+else				#if args is passed then check validity then clone and build
+	if [[ $1 != http?(s)://github.com/*/* ]]; then
+		echo "Please enter valid github repository url."
 		exit 1
 	fi
-	dir=$(echo $1 | sed 's@.*/@@')
-	git clone $1 $dir 
+	dir=$(echo $1 | sed 's@.*/@@')	#creates a directory to clone the project
+	git clone $1 $dir 	        
 	cd $dir
-	build
-	exit 1
+	build			        #after cloning the repo, cd in it and run build function
+	#exit 1
 fi
 
 #if inside a gradle project then type "grdl" and it will build and install
