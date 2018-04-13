@@ -1,8 +1,8 @@
 ## What script does?
-Bash script to automatically build and install android apk from a gradle based project.
 
-Shell script to download an android project from repo and build debug apk and install in android device via adb.
+Linux/Unix Shell script to automatically build and install android apk from a gradle based project.
 
+Also it can download android project from github repository and builds the debug apk and then install it in android device via adb.
 
 *This is just a simple script which install debug apk obtained by running ./gradlew script of the project. If there is exception in building which doesn't produce apk, then you have to handle the exception and rerun the script.*
 
