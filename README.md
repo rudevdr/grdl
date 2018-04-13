@@ -16,9 +16,14 @@ Shell script to download an android project from repo and build debug apk and in
 
 ## Sample
 
+* If already inside a gradle based android project:
+`$ ./grdl`
+
+* If you want to build and install a gradle based android project from github:
+
 `$ ./grdl https://github.com/kaushikgopal/RxJava-Android-Samples`
 
-OR 
+, which is similar to:  
 
 ```bash
 $ git clone https://github.com/kaushikgopal/RxJava-Android-Samples
