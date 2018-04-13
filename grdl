@@ -24,6 +24,10 @@ function build {
 
 #main script
 
+if [[ ! -d "$sdk" ]]; then
+	echo "Android Sdk directory not specified: please specify by editing the script and rerun it"
+	exit 1
+fi
 if [[ -z "$1" ]]; then
 	build			#if no args passed then install the script
 else				#if args is passed then check validity then clone and build
