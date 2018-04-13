@@ -1,7 +1,7 @@
 #!/bin/bash
 #script to automatically build and install apk from github projects or when you are in project directory
 
-sdk="/home/rud/.Sdk"		# <-- CHANGE THIS. It should be an absolute path to androdi Sdk dir. 
+sdk=""							# <-- UPDATE THIS. It should be an absolute path to android Sdk dir. 
 localf="./local.properties"
 apk="./app/build/outputs/apk/app-debug.apk"
 
@@ -9,38 +9,35 @@ apk="./app/build/outputs/apk/app-debug.apk"
 function build { 
 	if [ ! -e "$apk" ]; then	#if apk exist then directly install it 
 		if [ ! -e "./gradlew" ]; then	#check if inside valid gradle system
-			echo "no gradlew script found. not inside gradle system"
+			echo "./gradlew not found : not inside gradle system, current dir is: $PWD"
 			exit 1
 		fi
 		if [ ! -f "$localf" ]; then 
 			echo 'sdk.dir='$sdk > $localf 		#for specifying location of sdk
 		fi
-		./gradlew app:assembleDebug			#if apk does not exist build it
+		./gradlew app:assembleDebug				#if apk does not exist build it
 	fi
 	adb connect 192.168.43.1:5555				#if you use adb wireless connection
-	adb install -r $apk					#installs apk, reinstall if already exist
+	#~/.scripts/mod-t							#any other script you want to run before installing apk
+	adb install -r $apk					#installs apk, reinstall if already exist.
 	#if apk cant be installed because no single adb device found then, connect to single adb and then rerun script
 }
 
-#main script
+#script's entry point 
 
-if [[ ! -d "$sdk" ]]; then
-	echo "Android Sdk directory not specified: please specify by editing the script and rerun it"
+if [[ ! -d "$sdk" ]]; then #check if sdk dir exist
+	echo "Android Sdk not found in dir $sdk: update Sdk location in line 4."
 	exit 1
 fi
-if [[ -z "$1" ]]; then
-	build			#if no args passed then install the script
-else				#if args is passed then check validity then clone and build
+if [[ -z "$1" ]]; then 	   #if no args passed then build
+	build			
+else				       #if args is passed then check validity then clone and build
 	if [[ $1 != http?(s)://github.com/*/* ]]; then
-		echo "Please enter valid github repository url."
+		echo "Not valid github url: enter valid github repository url."
 		exit 1
 	fi
 	dir=$(echo $1 | sed 's@.*/@@')	#creates a directory to clone the project
 	git clone $1 $dir 	        
 	cd $dir
-	build			        #after cloning the repo, cd in it and run build function
-	#exit 1
+	build			   		        #after cloning the repo, cd in it and run build function
 fi
-
-#if inside a gradle project then type "grdl" and it will build and install
-#if you want to clone from github and then build and install then grdl <github url>
