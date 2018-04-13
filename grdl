@@ -17,7 +17,7 @@ function build { #this function builds and installs apk
 		fi
 		./gradlew app:assembleDebug			#if apk does not exist build it
 	fi
-	~/.scripts/mod-t						#script to connect to adb wirelesselsy
+	#adb connect 192.168.43.1:555  			#if you use adb wireless connection
 	adb install -r $apk						#installs apk, reinstall if already exist
 	#if apk cant be installed because no single adb device found then, connect to single adb and then rerun script
 }
