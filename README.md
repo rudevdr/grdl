@@ -3,6 +3,9 @@ Bash script to automatically build and install android apk from a gradle based p
 
 Shell script to download an android project from repo and build debug apk and install in android device via adb.
 
+
+*This is just a simple script which install debug apk obtained by running ./gradlew script of the project. If there is exception in building which doesn't produce apk, then you have to handle the exception and rerun the script.*
+
 ## Commands
 ./grdl <url> - If a github url is passed as the argument then the script first clones the repo then builds debug apk and installs it on the adb device.
 
@@ -25,13 +28,13 @@ $ ./grdl
 * If you want to build and install a gradle based android project from github:
 
 ```bash
-$ ./grdl https://github.com/kaushikgopal/RxJava-Android-Samples
+$ ./grdl https://github.com/amitshekhariitbhu/RxJava2-Android-Samples
 ```
 
 , which is similar to:  
 
 ```bash
-$ git clone https://github.com/kaushikgopal/RxJava-Android-Samples
-$ cd RxJava-Android-Samples
+$ git clone https://github.com/amitshekhariitbhu/RxJava2-Android-Samples
+$ cd RxJava2-Android-Samples
 $ ./grdl
 ```
